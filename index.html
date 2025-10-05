@@ -42,7 +42,7 @@
     <section class="screen1-5 h-screen flex justify-center items-center p-4" style="background-color: color(display-p3 0.1 0.1 0.15);">
         <div class="text-center">
             <h2 class="text-8xl font-serif mb-8" style="color: color(display-p3 1 1 1);">Lake Tuz</h2>
-            <p class="text-4xl leading-relaxed mx-32 my-16" style="color: color(display-p3 0.9 0.9 0.9);">Lake Tuz is Turkey's second largest lake and one of the world's largest hypersaline lakes. Located in the Central Anatolia region, this remarkable body of water is famous for its dramatic color changes throughout the year, ranging from brilliant pink and salmon to crystal white, and sometimes even green and blue, depending on seasonal conditions and the presence of salt-tolerant microorganisms.</p>
+            <p class="text-4xl leading-relaxed mx-32 my-16" style="color: color(display-p3 0.9 0.9 0.9);"><a href="https://en.wikipedia.org/wiki/Lake_Tuz" target="_blank" class="italic text-gray-300 hover:text-white transition-colors duration-200">Lake Tuz</a> is Turkey's second largest lake and one of the world's largest hypersaline lakes. Located in the Central Anatolia region, this remarkable body of water is famous for its dramatic color changes throughout the year, ranging from brilliant pink and salmon to crystal white, and sometimes even green and blue, depending on seasonal conditions and the presence of salt-tolerant microorganisms.</p>
         </div>
     </section>
     
@@ -61,21 +61,45 @@
     <section class="screen3 h-screen flex justify-center items-center p-4">
         <div class="text-center">
             <h2 class="text-4xl font-serif mb-6" style="color: color(display-p3 1 1 1);">Magical Colors of Lake Tuz</h2>
-            <p class="text-lg mb-8" style="color: color(display-p3 0.8 0.8 0.8);">Hover over the cells to see the lake with different colors</p>
+            <p class="text-lg mb-8" style="color: color(display-p3 0.8 0.8 0.8);"><a href="#" class="hover:text-blue-200 transition-colors duration-200 relative group" id="modis-link">Datasets from MODIS</a> instrument of the satellite Terra are used to find days with clear sky and to determine colors in the lake.</p>
             <div id="simple-graph"></div>
         </div>
     </section>
 
-    <section class="screen4 h-screen flex justify-center items-center p-4 bg-green-600">
-        <div class="text-center max-w-4xl">
-            <h2 class="text-4xl font-serif mb-8" style="color: color(display-p3 1 1 1);">The Science Behind the Colors</h2>
-            <div class="space-y-6 text-lg" style="color: color(display-p3 0.8 0.8 0.8);">
-                <p>Lake Tuz's remarkable color variations are driven by complex ecological and environmental factors. The lake's hypersaline environment creates unique conditions that support specialized microorganisms.</p>
-                <p>During different seasons, the lake transforms through shades of pink, orange, and white as halophilic bacteria and algae populations fluctuate. These microorganisms produce pigments that give the lake its distinctive colors.</p>
-                <p>Temperature, salinity levels, and seasonal changes all contribute to this natural color palette, making Lake Tuz one of the most visually dynamic salt lakes in the world.</p>
+    <section class="screen-conditions h-screen flex justify-center items-center p-4" style="background-color: color(display-p3 0.15 0.1 0.1);">
+        <div class="text-center max-w-6xl">
+            <h2 class="text-6xl font-serif mb-8" style="color: color(display-p3 1 1 1);">Ideal Conditions for Color Transformation</h2>
+            <div class="space-y-8 text-2xl leading-relaxed" style="color: color(display-p3 0.9 0.9 0.9);">
+                <p class="mx-16">Lake Tuz's spectacular pink coloration occurs under specific environmental conditions that create the perfect habitat for salt-tolerant microorganisms like <em>Dunaliella salina</em> and halophilic bacteria.</p>
+                <p class="mx-16">These microorganisms thrive when salinity levels reach 15-35% and water temperatures range between 20-35°C, conditions that typically occur during the hot, dry summer months when evaporation concentrates the salt content.</p>
+                <p class="mx-16">During periods of heavy rainfall, the lake's salinity decreases significantly, and the characteristic blue color becomes more visible as the pink-pigmented microorganisms become less dominant in the diluted environment.</p>
             </div>
         </div>
     </section>
+
+    <section class="screen4 h-screen flex justify-center items-center p-8 bg-white">
+        <div class="text-center p-8">
+            <img src="graph.png" alt="Lake Tuz Graph" class="mx-auto opacity-0" id="graph-image">
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-lg mb-4">Made in two days for NASA Space Apps Challenge 2025</p>
+            <p class="text-sm mb-6 text-gray-300">Team Members:</p>
+            <div class="flex justify-center items-center space-x-8 mb-6">
+                <div class="flex flex-col items-center">
+                    <img src="safa_orhan.jpg" alt="Safa Orhan" class="w-20 h-20 rounded-full mb-2 object-cover">
+                    <a href="https://x.com/safaorhanTR" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors duration-200">Safa Orhan</a>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="omer_faruk_oz.jpg" alt="Ömer Faruk Öz" class="w-20 h-20 rounded-full mb-2 object-cover">
+                    <a href="https://www.linkedin.com/in/%C3%B6mer-faruk-%C3%B6z-3597191aa" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors duration-200">Ömer Faruk Öz</a>
+                </div>
+            </div>
+            <p class="text-xs text-gray-400">© 2025 Lake Tuz Visualization Project</p>
+        </div>
+    </footer>
 
     <script>
         gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -427,6 +451,155 @@
         }
         
         document.addEventListener('DOMContentLoaded', createSimpleGraph);
+
+        // Graph fade-in animation with scrub
+        gsap.fromTo("#graph-image", 
+            {
+                opacity: 0,
+                y: 50
+            },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: ".screen4",
+                    start: "top center",
+                    end: "center center",
+                    scrub: 1,
+                    toggleActions: "play none none reverse"
+                }
+            }
+        );
+
+        // MODIS tooltip functionality
+        const modisLink = document.getElementById('modis-link');
+        let modisTooltip = null;
+
+        modisLink.addEventListener('mouseenter', function(e) {
+            // Create tooltip if it doesn't exist
+            if (!modisTooltip) {
+                modisTooltip = document.createElement('div');
+                modisTooltip.className = 'modis-tooltip';
+                modisTooltip.style.cssText = `
+                    position: fixed;
+                    top: ${e.clientY + 10}px;
+                    left: ${e.clientX + 10}px;
+                    z-index: 1000;
+                    pointer-events: none;
+                    background: rgba(0, 0, 0, 0.9);
+                    color: white;
+                    padding: 12px 16px;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    line-height: 1.4;
+                    max-width: 300px;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+                    opacity: 0;
+                    transition: opacity 0.2s ease;
+                `;
+                modisTooltip.innerHTML = `
+                    <div style="font-weight: bold; margin-bottom: 8px;">MODIS Datasets:</div>
+                    <div>• Corrected Reflectance (True Color), Terra / MODIS</div>
+                    <div>• Cloud Multi Layer Flag, Terra / MODIS</div>
+                `;
+                document.body.appendChild(modisTooltip);
+            } else {
+                // Update position if tooltip exists
+                modisTooltip.style.top = `${e.clientY + 10}px`;
+                modisTooltip.style.left = `${e.clientX + 10}px`;
+            }
+            
+            // Show tooltip with fade-in
+            setTimeout(() => {
+                if (modisTooltip) {
+                    modisTooltip.style.opacity = '1';
+                }
+            }, 10);
+        });
+
+        modisLink.addEventListener('mousemove', function(e) {
+            if (modisTooltip) {
+                modisTooltip.style.top = `${e.clientY + 10}px`;
+                modisTooltip.style.left = `${e.clientX + 10}px`;
+            }
+        });
+
+        modisLink.addEventListener('mouseleave', function() {
+            if (modisTooltip) {
+                modisTooltip.style.opacity = '0';
+                setTimeout(() => {
+                    if (modisTooltip) {
+                        modisTooltip.remove();
+                        modisTooltip = null;
+                    }
+                }, 200);
+            }
+        });
+
+        // Graph image tooltip functionality
+        const graphImage = document.getElementById('graph-image');
+        let graphTooltip = null;
+
+        graphImage.addEventListener('mouseenter', function(e) {
+            // Create tooltip if it doesn't exist
+            if (!graphTooltip) {
+                graphTooltip = document.createElement('div');
+                graphTooltip.className = 'graph-tooltip';
+                graphTooltip.style.cssText = `
+                    position: fixed;
+                    top: ${e.clientY + 10}px;
+                    left: ${e.clientX + 10}px;
+                    z-index: 1000;
+                    pointer-events: none;
+                    background: rgba(0, 0, 0, 0.9);
+                    color: white;
+                    padding: 12px 16px;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    line-height: 1.4;
+                    max-width: 300px;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+                    opacity: 0;
+                    transition: opacity 0.2s ease;
+                `;
+                graphTooltip.innerHTML = `
+                    <div style="font-weight: bold; margin-bottom: 8px;">Dataset Information:</div>
+                    <div>• Land Surface Temperature (Day), Terra / MODIS</div>
+                `;
+                document.body.appendChild(graphTooltip);
+            } else {
+                // Update position if tooltip exists
+                graphTooltip.style.top = `${e.clientY + 10}px`;
+                graphTooltip.style.left = `${e.clientX + 10}px`;
+            }
+            
+            // Show tooltip with fade-in
+            setTimeout(() => {
+                if (graphTooltip) {
+                    graphTooltip.style.opacity = '1';
+                }
+            }, 10);
+        });
+
+        graphImage.addEventListener('mousemove', function(e) {
+            if (graphTooltip) {
+                graphTooltip.style.top = `${e.clientY + 10}px`;
+                graphTooltip.style.left = `${e.clientX + 10}px`;
+            }
+        });
+
+        graphImage.addEventListener('mouseleave', function() {
+            if (graphTooltip) {
+                graphTooltip.style.opacity = '0';
+                setTimeout(() => {
+                    if (graphTooltip) {
+                        graphTooltip.remove();
+                        graphTooltip = null;
+                    }
+                }, 200);
+            }
+        });
 
     </script>
 </body>
