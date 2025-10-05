@@ -25,6 +25,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
 
 </head>
 
@@ -45,7 +46,8 @@
 
     <section class="screen3 h-screen flex justify-center items-center p-4">
         <div class="text-center">
-            <h2 class="text-4xl font-serif mb-6" style="color: color(display-p3 1 1 1);">Weekly Prominent Color</h2>
+            <h2 class="text-4xl font-serif mb-6" style="color: color(display-p3 1 1 1);">Magical Colors of Lake Tuz</h2>
+            <p class="text-lg mb-8" style="color: color(display-p3 0.8 0.8 0.8);">Hover over the cells to see the lake with different colors</p>
             <div id="simple-graph"></div>
         </div>
     </section>
@@ -62,7 +64,7 @@
     </section>
 
     <script>
-        gsap.registerPlugin(ScrollTrigger);
+        gsap.registerPlugin(ScrollTrigger, SplitText);
 
         function imageSequence(config) {
             let playhead = { frame: 0 },
@@ -97,7 +99,7 @@
                 start: "top top",
                 end: "+=512",
                 scrub: true, // important!
-                markers: true,
+                markers: false,
                 pin: true
             }
         });
@@ -110,7 +112,8 @@
                 start: "top top",
                 end: "bottom top",
                 scrub: true,
-                pin: true
+                pin: true,
+                markers: false
             }
         });
 
@@ -119,7 +122,7 @@
             const graph = document.getElementById('simple-graph');
             graph.innerHTML = '';
             
-            const years = [2020, 2021, 2022, 2023, 2024, 2025];
+            const years = [2019, 2020, 2021, 2022, 2023, 2024, 2025];
             const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
             
             // Create month header row
@@ -184,9 +187,13 @@
                                 // Use real color from the data
                                 const { r, g, b } = weekData.color;
                                 cell.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                                
+                                // Store the filename for tooltip use
+                                cell.dataset.filename = weekData.date;
                             } else {
                                 // Fallback to white if no data
                                 cell.style.backgroundColor = 'white';
+                                cell.dataset.filename = 'examples/1.png'; // Default fallback
                             }
                             
                             // Set initial state for animation
@@ -195,39 +202,62 @@
                             
                             // Add tooltip functionality
                             cell.addEventListener('mouseenter', function(e) {
-                                // Check if tooltip already exists
-                                const existingTooltip = document.querySelector('.cell-tooltip');
-                                if (existingTooltip) {
-                                    return; // Don't create another tooltip
+                                // Get or create tooltip
+                                let tooltip = document.querySelector('.cell-tooltip');
+                                
+                                if (!tooltip) {
+                                    // Create tooltip if it doesn't exist
+                                    tooltip = document.createElement('div');
+                                    tooltip.className = 'cell-tooltip';
+                                    tooltip.style.cssText = `
+                                        position: fixed;
+                                        top: ${e.clientY + 10}px;
+                                        left: ${e.clientX + 10}px;
+                                        z-index: 1000;
+                                        pointer-events: none;
+                                        background: rgba(0, 0, 0, 0.8);
+                                        padding: 20px;
+                                        border-radius: 4px;
+                                        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+                                    `;
+                                    document.body.appendChild(tooltip);
+                                } else {
+                                    // Update position if tooltip exists
+                                    tooltip.style.top = `${e.clientY + 10}px`;
+                                    tooltip.style.left = `${e.clientX + 10}px`;
                                 }
                                 
-                                // Create tooltip
-                                const tooltip = document.createElement('div');
-                                tooltip.className = 'cell-tooltip';
-                                tooltip.style.cssText = `
-                                    position: fixed;
-                                    top: ${e.clientY + 10}px;
-                                    left: ${e.clientX + 10}px;
-                                    z-index: 1000;
-                                    pointer-events: none;
-                                    background: rgba(0, 0, 0, 0.8);
-                                    padding: 20px;
-                                    border-radius: 4px;
-                                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-                                `;
-                                
-                                // Create image
-                                const img = document.createElement('img');
-                                img.src = 'examples/1.png';
+                                // Update image source
+                                const img = tooltip.querySelector('img') || document.createElement('img');
+                                img.src = `selected/${cell.dataset.filename}` || 'examples/1.png';
                                 img.style.cssText = `
                                     width: 250px;
                                     height: 250px;
                                     object-fit: cover;
                                     border-radius: 4px;
+                                    filter: saturate(2);
                                 `;
                                 
-                                tooltip.appendChild(img);
-                                document.body.appendChild(tooltip);
+                                // Add image to tooltip if not already there
+                                if (!tooltip.querySelector('img')) {
+                                    tooltip.appendChild(img);
+                                }
+                                
+                                // Add date text below image
+                                const dateText = tooltip.querySelector('.date-text') || document.createElement('div');
+                                dateText.className = 'date-text';
+                                dateText.textContent = cell.dataset.filename ? cell.dataset.filename.replace('.png', '') : 'Unknown Date';
+                                dateText.style.cssText = `
+                                    color: white;
+                                    font-size: 14px;
+                                    text-align: center;
+                                    margin-top: 10px;
+                                    font-weight: 500;
+                                `;
+                                
+                                if (!tooltip.querySelector('.date-text')) {
+                                    tooltip.appendChild(dateText);
+                                }
                             });
                             
                             // Update tooltip position on mousemove
@@ -239,7 +269,14 @@
                                 }
                             });
                             
-                            // Remove mouseleave event listener - tooltip stays visible
+                            // Add mouseleave event listener to the graph container
+                            const graph = document.getElementById('simple-graph');
+                            graph.addEventListener('mouseleave', function() {
+                                const tooltip = document.querySelector('.cell-tooltip');
+                                if (tooltip) {
+                                    tooltip.remove();
+                                }
+                            });
                             
                             row.appendChild(cell);
                         }
@@ -266,7 +303,7 @@
                                 end: "center center",
                                 scrub: 1,
                                 toggleActions: "play none none reverse",
-                                markers: true
+                                markers: false
                             }
                         }
                     );
