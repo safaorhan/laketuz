@@ -175,14 +175,14 @@
                         row.appendChild(yearLabel);
                         
                         // Create 52 cells with real colors
-                        for (let week = 1; week <= 52; week++) {
+                        for (let week = 0; week <= 51; week++) {
                             const cell = document.createElement('div');
                             cell.style.width = '20px';
                             cell.style.height = '20px';
                             cell.style.borderRadius = '4px';
                             
                             // Find data for this year and week
-                            const weekData = data.find(item => item.year === year && item.week === week);
+                            const weekData = data.find(item => item.year == year && item.week === week);
                             
                             if (weekData && weekData.color) {
                                 // Use real color from the data
