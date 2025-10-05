@@ -39,9 +39,22 @@
         </div>
     </section>
     
-    <section class="screen2 h-screen flex justify-center items-center p-4 bg-blue-600">
+    <section class="screen1-5 h-screen flex justify-center items-center p-4" style="background-color: color(display-p3 0.1 0.1 0.15);">
         <div class="text-center">
-            <p class="text-2xl text-white">The lake changes its colors due to many factors, including the algea and heliobacteria population in the water.</p>
+            <h2 class="text-8xl font-serif mb-8" style="color: color(display-p3 1 1 1);">Lake Tuz</h2>
+            <p class="text-4xl leading-relaxed mx-32 my-16" style="color: color(display-p3 0.9 0.9 0.9);">Lake Tuz is Turkey's second largest lake and one of the world's largest hypersaline lakes. Located in the Central Anatolia region, this remarkable body of water is famous for its dramatic color changes throughout the year, ranging from brilliant pink and salmon to crystal white, and sometimes even green and blue, depending on seasonal conditions and the presence of salt-tolerant microorganisms.</p>
+        </div>
+    </section>
+    
+    <section class="screen2 h-screen flex justify-center items-center p-4" style="background-color: rgb(70, 142, 144);">
+        <div class="text-center">
+            <p class="text-6xl text-white mx-32 my-16">The lake turns pink due to the presence of salt-tolerant algae like Dunaliella salina, which produces carotenoid pigments. These microorganisms thrive in the hypersaline conditions, creating the characteristic pink and salmon colors that make Lake Tuz so visually striking.</p>
+        </div>
+    </section>
+
+    <section class="screen2-5 h-screen flex justify-center items-center p-4" style="background-color: rgb(70, 142, 144);">
+        <div class="text-center">
+            <p class="text-6xl text-white mx-32 my-16">During drought periods, the lake's water evaporates, leaving behind thick layers of salt crystals. The intense sunlight reflects off these white salt deposits, creating the lake's striking white appearance that contrasts dramatically with its colorful phases.</p>
         </div>
     </section>
 
@@ -105,15 +118,86 @@
             }
         });
 
+        // SplitText animation for screen1-5
+        const aboutText = new SplitText(".screen1-5 p", {type: "words"});
+        
+        gsap.fromTo(aboutText.words, 
+            {
+                opacity: 0,
+                y: 30
+            },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                stagger: 0.05,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: ".screen1-5",
+                    start: "top center",
+                    end: "50% center",
+                    scrub: 1,
+                    markers: false
+                }
+            }
+        );
+
+        // Color words based on their content
+        aboutText.words.forEach(word => {
+            const text = word.textContent.toLowerCase();
+            if (text === "salmon") {
+                word.style.color = "rgb(231, 155, 104)";
+                word.style.fontWeight = "bold";
+            } else if (text === "pink") {
+                word.style.color = "rgb(238, 166, 138)";
+                word.style.fontWeight = "bold";
+            } else if (text === "white,") {
+                word.style.color = "#ffffff";
+                word.style.fontWeight = "bold";
+            } else if (text === "green") {
+                word.style.color = "rgb(70, 114, 60)";
+                word.style.fontWeight = "bold";
+            } else if (text === "blue,") {
+                word.style.color = "rgb(70, 142, 144)";
+                word.style.fontWeight = "bold";
+            }
+        });
+
+
         // Background color animation for screen2
         gsap.to(".screen2", {
-            backgroundColor: "#ec4899", // Pink color
+            backgroundColor: "rgb(238, 166, 138)", // Realistic pink color
             scrollTrigger: {
                 trigger: ".screen2",
                 start: "top top",
                 end: "bottom top",
                 scrub: true,
                 pin: true,
+                markers: false
+            }
+        });
+
+        // Background color animation for screen2-5 (teal to white)
+        gsap.to(".screen2-5", {
+            backgroundColor: "rgb(255, 255, 255)", // White color
+            scrollTrigger: {
+                trigger: ".screen2-5",
+                start: "top top",
+                end: "bottom top",
+                scrub: true,
+                pin: true,
+                markers: false
+            }
+        });
+
+        // Text color animation for screen2-5 (white to dark)
+        gsap.to(".screen2-5 p", {
+            color: "rgb(50, 50, 50)", // Dark gray color
+            scrollTrigger: {
+                trigger: ".screen2-5",
+                start: "top top",
+                end: "bottom top",
+                scrub: true,
                 markers: false
             }
         });
